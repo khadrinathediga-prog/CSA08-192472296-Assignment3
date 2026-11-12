@@ -1,203 +1,142 @@
 
-import random
 import time
 import sys
 
+print("SENSOR READING CLEANING SYSTEM")
 
-# 1. Generate sensor readings
-def generate_readings(size):
-    return [
-        random.uniform(-60, 60)
-        for _ in range(size)
-    ]
+# Original sensor readings
+readings = [-60, -50, -10, 0, 2, 5, 8, 12, 25, 50, 60]
 
+print("\nORIGINAL READINGS:", readings)
 
-# 2. Clean readings using loop and append
-def clean_with_loop(readings):
-    valid = []
+# 1. Using for loop and append()
+valid_loop = []
+for value in readings:
+    if -50 <= value <= 50:
+        valid_loop.append(value)
 
-    for value in readings:
+print("\nVALID READINGS USING LOOP:", valid_loop)
+
+# 2. Using list comprehension
+valid_comp = [
+    value for value in readings
+    if -50 <= value <= 50
+]
+
+print("VALID READINGS USING COMPREHENSION:", valid_comp)
+
+# 3. Using filter() and lambda
+valid_filter = list(
+    filter(lambda value: -50 <= value <= 50, readings)
+)
+
+print("VALID READINGS USING FILTER:", valid_filter)
+
+# 4. Using map() and lambda for Fahrenheit conversion
+fahrenheit_loop = []
+for value in valid_loop:
+    fahrenheit_loop.append(value * 9 / 5 + 32)
+
+fahrenheit_comp = [
+    value * 9 / 5 + 32 for value in valid_comp
+]
+
+fahrenheit_map = list(
+    map(lambda value: value * 9 / 5 + 32, valid_filter)
+)
+
+print("\nFAHRENHEIT USING LOOP:", fahrenheit_loop)
+print("FAHRENHEIT USING COMPREHENSION:", fahrenheit_comp)
+print("FAHRENHEIT USING MAP:", fahrenheit_map)
+
+# 5. Alarm minutes using enumerate()
+alarm_minutes = [
+    minute
+    for minute, value in enumerate(readings)
+    if value > 10
+]
+
+print("\nALARM MINUTES:", alarm_minutes)
+
+# 6. Dictionary comprehension
+reading_status = {
+    minute: "ALERT" if value > 10 else "NORMAL"
+    for minute, value in enumerate(readings)
+}
+
+print("\nDICTIONARY COMPREHENSION:", reading_status)
+
+# 7. Set comprehension
+unique_readings = {value for value in readings}
+
+print("\nSET COMPREHENSION:", unique_readings)
+
+# 8. Method comparison
+print("\nMETHOD COMPARISON")
+print("Loop and comprehension match:", valid_loop == valid_comp)
+print("Loop and filter match:", valid_loop == valid_filter)
+print("All Fahrenheit results match:",
+      fahrenheit_loop == fahrenheit_comp == fahrenheit_map)
+
+# 9. Edge case testing
+all_valid = [2, 5, 10]
+all_invalid = [-80, 70, 100]
+empty_readings = []
+boundary_readings = [-50, 50]
+
+def clean_data(data):
+    return [value for value in data if -50 <= value <= 50]
+
+print("\nEDGE CASE TESTING")
+print("All valid:", clean_data(all_valid))
+print("All invalid:", clean_data(all_invalid))
+print("Empty input:", clean_data(empty_readings))
+print("Boundary values:", clean_data(boundary_readings))
+
+# 10. Memory comparison: list vs generator
+sample_data = range(100000)
+
+list_data = [x * 2 for x in sample_data]
+generator_data = (x * 2 for x in sample_data)
+
+print("\nMEMORY COMPARISON")
+print("List memory:", sys.getsizeof(list_data), "bytes")
+print("Generator memory:", sys.getsizeof(generator_data), "bytes")
+
+# 11. Performance testing
+print("\nPERFORMANCE TESTING")
+
+for size in [10000, 100000, 1000000]:
+    data = [i % 120 - 60 for i in range(size)]
+
+    # Loop method
+    start = time.perf_counter()
+    result_loop = []
+    for value in data:
         if -50 <= value <= 50:
-            valid.append(value)
+            result_loop.append(value)
+    loop_time = time.perf_counter() - start
 
-    return valid
-
-
-# 3. Clean readings using list comprehension
-def clean_with_comprehension(readings):
-    return [
-        value for value in readings
+    # List comprehension method
+    start = time.perf_counter()
+    result_comp = [
+        value for value in data
         if -50 <= value <= 50
     ]
+    comp_time = time.perf_counter() - start
 
-
-# 4. Clean readings using filter and lambda
-def clean_with_filter(readings):
-    return list(
-        filter(lambda value: -50 <= value <= 50, readings)
+    # Filter and lambda method
+    start = time.perf_counter()
+    result_filter = list(
+        filter(lambda value: -50 <= value <= 50, data)
     )
+    filter_time = time.perf_counter() - start
 
+    print(f"\nInput size: {size}")
+    print(f"Loop time: {loop_time:.6f} seconds")
+    print(f"Comprehension time: {comp_time:.6f} seconds")
+    print(f"Filter time: {filter_time:.6f} seconds")
+    print("All methods produce identical results:",
+          result_loop == result_comp == result_filter)
 
-# 5. Convert Celsius to Fahrenheit
-def convert_to_fahrenheit(readings):
-    return [
-        (value * 9 / 5) + 32
-        for value in readings
-    ]
-
-
-# 6. Identify alarm minutes using original positions
-def find_alarm_minutes(readings):
-    return [
-        minute
-        for minute, temperature in enumerate(readings, start=1)
-        if -50 <= temperature <= 50
-        and (temperature < 2 or temperature > 8)
-    ]
-
-
-# 7. Dictionary comprehension
-def create_temperature_dictionary(readings):
-    return {
-        index: temperature
-        for index, temperature in enumerate(readings, start=1)
-    }
-
-
-# 8. Set comprehension
-def unique_temperatures(readings):
-    return {
-        round(value, 2)
-        for value in readings
-    }
-
-
-# 9. Performance comparison
-def performance_comparison():
-    print("\nPERFORMANCE COMPARISON")
-
-    for size in [10000, 100000, 1000000]:
-        readings = generate_readings(size)
-
-        start = time.perf_counter()
-        loop_result = clean_with_loop(readings)
-        loop_time = time.perf_counter() - start
-
-        start = time.perf_counter()
-        comprehension_result = clean_with_comprehension(readings)
-        comprehension_time = time.perf_counter() - start
-
-        start = time.perf_counter()
-        filter_result = clean_with_filter(readings)
-        filter_time = time.perf_counter() - start
-
-        print(f"\nReadings: {size}")
-        print(f"Loop and append: {loop_time:.6f} seconds")
-        print(f"List comprehension: {comprehension_time:.6f} seconds")
-        print(f"Filter and lambda: {filter_time:.6f} seconds")
-
-        print(
-            "All methods give same result:",
-            loop_result == comprehension_result == filter_result
-        )
-
-        print("Valid readings:", len(comprehension_result))
-
-
-# 10. Memory comparison
-def memory_comparison():
-    print("\nMEMORY COMPARISON")
-
-    readings = generate_readings(100000)
-
-    list_result = clean_with_comprehension(readings)
-
-    generator_result = (
-        value for value in readings
-        if -50 <= value <= 50
-    )
-
-    print("List memory:", sys.getsizeof(list_result), "bytes")
-    print("Generator memory:", sys.getsizeof(generator_result), "bytes")
-
-
-# 11. Edge case testing
-def edge_case_testing():
-    print("\nEDGE CASE TESTING")
-
-    print("All valid readings:",
-          clean_with_comprehension([2, 5, 10]))
-
-    print("All invalid readings:",
-          clean_with_comprehension([-100, 100, 75]))
-
-    print("Empty readings:",
-          clean_with_comprehension([]))
-
-    print("Boundary readings:",
-          clean_with_comprehension([-50, 50, -51, 51]))
-
-
-# 12. Main program
-def main():
-    random.seed(42)
-
-    print("SENSOR READING CLEANING SYSTEM")
-    print("-" * 45)
-
-    readings = [
-        -60, -50, -10, 0, 2, 5, 8, 12, 25, 50, 60
-    ]
-
-    print("\nORIGINAL READINGS")
-    print(readings)
-
-    valid = clean_with_comprehension(readings)
-
-    print("\nVALID READINGS (-50 to 50)")
-    print(valid)
-
-    fahrenheit = convert_to_fahrenheit(valid)
-
-    print("\nFAHRENHEIT CONVERSION")
-    print([round(value, 2) for value in fahrenheit])
-
-    # Use original readings to preserve minute positions
-    alarms = find_alarm_minutes(readings)
-
-    print("\nALARM MINUTES (outside 2–8°C)")
-    print(alarms)
-
-    temperature_dict = create_temperature_dictionary(valid)
-
-    print("\nDICTIONARY COMPREHENSION")
-    print(temperature_dict)
-
-    unique_values = unique_temperatures(valid)
-
-    print("\nSET COMPREHENSION")
-    print(sorted(unique_values))
-
-    # Enumerate demonstration
-    print("\nENUMERATE DEMONSTRATION")
-
-    for minute, temperature in enumerate(valid, start=1):
-        print(f"Minute {minute}: {temperature}°C")
-
-    # Compare cleaning methods
-    print("\nMETHOD COMPARISON")
-
-    print("Loop result:", clean_with_loop(readings))
-    print("Comprehension result:",
-          clean_with_comprehension(readings))
-    print("Filter result:", clean_with_filter(readings))
-
-    edge_case_testing()
-
-    memory_comparison()
-
-    performance_comparison()
-
-
-if __name__ == "__main__":
-    main()
+print("\nQ5 EXECUTION COMPLETED SUCCESSFULLY")
