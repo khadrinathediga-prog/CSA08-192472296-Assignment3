@@ -89,9 +89,9 @@ The program generated random rainfall readings and compared both methods.
 
 | Readings | Naive Time (seconds) | Running-Sum Time (seconds) |
 |---:|---:|---:|
-| 365 | 0.000086 | 0.000047 |
-| 36,500 | 0.007519 | 0.003387 |
-| 365,000 | 0.051383 | 0.026873 |
+| 365 | 0.000055 | 0.000028 |
+| 36,500 | 0.005362 | 0.002757 |
+| 365,000 | 0.048610 | 0.026357 |
 
 **Observation:** The running-sum method was faster in all three experiments.
 

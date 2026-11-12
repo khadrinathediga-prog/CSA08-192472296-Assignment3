@@ -67,12 +67,11 @@ Index construction requires O(T × S) time and additional memory proportional to
 
 The program was tested with 100, 1,000 and 10,000 trains. Each timing represents 100 station queries.
 
-| Number of trains | Without index | With index | Index memory |
-|---:|---:|---:|---:|
-| 100 | 0.001990 s | 0.000652 s | 23,667 bytes |
-| 1,000 | 0.017803 s | 0.006488 s | 223,459 bytes |
-| 10,000 | 0.181993 s | 0.072553 s | 2,229,955 bytes |
-
+| Number of trains | Index Build Time | Without Index (100 queries) | With Index (100 queries) | Index Memory |
+|---:|---:|---:|---:|---:|
+| 100 | 0.000043 s | 0.002070 s | 0.000755 s | 23,667 bytes |
+| 1,000 | 0.000361 s | 0.018602 s | 0.006818 s | 223,459 bytes |
+| 10,000 | 0.013319 s | 0.228978 s | 0.087167 s | 2,229,955 bytes |
 All search results matched between the two methods.
 
 The indexed method was approximately three times faster in these tests.

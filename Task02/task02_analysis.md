@@ -151,7 +151,6 @@ The program compares list and tuple creation and indexing using `time.perf_count
 |---|---:|---:|
 | Creation | 0.004804 | 0.005137 |
 | Indexing | 0.001599 | 0.001562 |
-
 Observation: The measured times are very close. Tuple creation was slightly slower in this experiment, while tuple indexing was slightly faster.
 
 Timings may vary between executions and computers.
