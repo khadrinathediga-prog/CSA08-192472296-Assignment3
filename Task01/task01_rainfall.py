@@ -84,6 +84,16 @@ def main():
 
     print("Total readings:", len(readings))
 
+    # Maximum and minimum daily rainfall
+    max_rainfall = max(readings)
+    min_rainfall = min(readings)
+
+    print("\nMaximum rainfall:", max_rainfall, "mm")
+    print("Maximum rainfall day:", readings.index(max_rainfall) + 1)
+
+    print("Minimum rainfall:", min_rainfall, "mm")
+    print("Minimum rainfall day:", readings.index(min_rainfall) + 1)
+
     # Weekly totals
     weeks = weekly_totals(readings)
 

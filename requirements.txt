@@ -1,0 +1,2 @@
+# Assignment 3 uses Python standard libraries only.
+# No external packages are required.
